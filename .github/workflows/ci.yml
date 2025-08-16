@@ -4,7 +4,8 @@ on:
   pull_request:
     branches: [ "stage" ]     # feature -> stage PR에서 실행
   push:
-    branches: [ "stage" ]     # stage로 머지된 커밋에서 실행
+    branches: [ "**" ]
+    branches-ignore: [ "master" ]
 
 jobs:
   build-test:
