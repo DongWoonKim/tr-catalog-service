@@ -1,6 +1,7 @@
 package com.trevari.spring.trcatalogservice.interfaces.http;
 
 import com.trevari.spring.trcatalogservice.application.BookService;
+import com.trevari.spring.trcatalogservice.domain.book.Book;
 import com.trevari.spring.trcatalogservice.interfaces.dto.BookResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,8 @@ public class BookController {
     @GetMapping
     public Page<BookResponseDTO> list(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size) {
-//        return service.getBooks(page, size);  // ✅ page/size
-        return null;
+        Page<Book> books = service.getBooks(page, size);
+
+        return books.map(BookResponseDTO::from);
     }
 }
