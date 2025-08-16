@@ -10,20 +10,14 @@ version = '0.0.1-SNAPSHOT'
 description = 'tr-catalog-service'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+    compileOnly { extendsFrom annotationProcessor }
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -40,47 +34,53 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-    finalizedBy 'jacocoTestReport', 'jacocoTestCoverageVerification' // ✅ 테스트 후 리포트+검증 자동 실행
+    finalizedBy 'jacocoTestReport', 'jacocoTestCoverageVerification'
 }
 
-jacoco {
-    toolVersion = "0.8.13"
-}
+jacoco { toolVersion = "0.8.13" }
 
-def serviceClassIncludes = [
-        '**/service/*.class',
-        '**/service/**/*.class'
-]
+/**
+ * ✅ service/*만 커버리지 측정
+ *  - .class 경로 기준 패턴
+ *  - 패키지 구조가 다르면 include 패턴만 바꿔줘
+ */
+def serviceClassIncludes = ['**/service/*.class', '**/service/**/*.class']
+def classesDirProvider = layout.buildDirectory.dir("classes/java/main")
 
-jacocoTestReport {
-    dependsOn test
+tasks.named('jacocoTestReport', JacocoReport) {
+    dependsOn tasks.test
     reports {
-        xml.required = true   // ✅ CI 도구가 읽을 수 있게 XML 생성
-        html.required = true  // ✅ 로컬에서 브라우저로 확인
+        xml.required = true
+        html.required = true
         csv.required = false
     }
-
-    doFirst {
-        classDirectories.setFrom(
-                files(classDirectories.files.collect { dir ->
-                    fileTree(dir: dir, include: serviceClassIncludes)
-                })
-        )
-    }
+    classDirectories.setFrom(
+            files(
+                    classesDirProvider.map { dir ->
+                        fileTree(dir) { include serviceClassIncludes }
+                    }
+            )
+    )
 }
 
-jacocoTestCoverageVerification {
-    // ✅ 커버리지 게이트: 미달 시 빌드 실패
+tasks.named('jacocoTestCoverageVerification', JacocoCoverageVerification) {
+    classDirectories.setFrom(
+            files(
+                    classesDirProvider.map { dir ->
+                        fileTree(dir) { include serviceClassIncludes }
+                    }
+            )
+    )
     violationRules {
         rule {
             element = 'BUNDLE'
-            // 라인 커버리지(코드라인 기준) 최소 50%
+            // ✅ 라인 커버리지 최소 50%
             limit {
                 counter = 'LINE'
                 value   = 'COVEREDRATIO'
                 minimum = 0.30
             }
-            // 분기 커버리지(조건분기) 최소 50%
+            // ✅ 분기 커버리지 최소 50%
             limit {
                 counter = 'BRANCH'
                 value   = 'COVEREDRATIO'
@@ -90,9 +90,9 @@ jacocoTestCoverageVerification {
     }
 }
 
-// `./gradlew coverage`로 리포트만 보고 싶을 때
+// 리포트만 보고 싶을 때
 tasks.register('coverage') {
     group = 'verification'
-    description = 'Runs tests and generates JaCoCo coverage reports'
+    description = 'Runs tests and generates JaCoCo coverage reports (service/* only)'
     dependsOn 'test', 'jacocoTestReport'
 }
