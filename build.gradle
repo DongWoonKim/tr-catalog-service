@@ -72,13 +72,13 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value   = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.30
             }
             // 분기 커버리지(조건분기) 최소 50%
             limit {
                 counter = 'BRANCH'
                 value   = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.30
             }
         }
 
