@@ -5,7 +5,6 @@ on:
     branches: [ "stage" ]     # feature -> stage PR에서 실행
   push:
     branches: [ "**" ]
-    branches-ignore: [ "master" ]
 
 jobs:
   build-test:
