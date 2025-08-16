@@ -1,7 +1,8 @@
-package com.trevari.spring.trcatalogservice.infrastructure.persistence;
+package com.trevari.spring.trcatalogservice.interfaces.mapper;
 
 import com.trevari.spring.trcatalogservice.domain.book.Book;
 import com.trevari.spring.trcatalogservice.domain.book.Isbn;
+import com.trevari.spring.trcatalogservice.infrastructure.persistence.BookEntity;
 import org.springframework.stereotype.Component;
 
 @Component

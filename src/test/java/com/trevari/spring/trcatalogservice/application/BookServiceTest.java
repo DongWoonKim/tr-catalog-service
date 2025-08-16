@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -66,6 +65,38 @@ class BookServiceTest {
         assertThat(page.getContent()).isEmpty();
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.getSize()).isEqualTo(10);
+    }
+
+    // 성공: 정확한 ISBN13로 조회
+    @Test
+    void ISBN으로_단건조회_성공_테스트() {
+        // when
+        var found = bookService.getBookByIsbn("9780132350884");
+
+        // then
+        assertThat(found).isPresent();
+        assertThat(found.get().getTitle()).isEqualTo("Effective Java");
+    }
+
+    // 성공: 하이픈 포함 ISBN도 정상 조회(정규화 확인)
+    @Test
+    void 하이픈_포함_ISBN으로_조회_성공_테스트() {
+        // when
+        var found = bookService.getBookByIsbn("978-0134685991");
+
+        // then
+        assertThat(found).isPresent();
+        assertThat(found.get().getTitle()).isEqualTo("Clean Code");
+    }
+
+    // 실패: 존재하지 않는 ISBN이면 empty
+    @Test
+    void 존재하지_않는_ISBN이면_empty_반환_테스트() {
+        // when
+        var notFound = bookService.getBookByIsbn("9999999999999");
+
+        // then
+        assertThat(notFound).isEmpty();
     }
 
 }

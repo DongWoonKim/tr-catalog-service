@@ -2,12 +2,12 @@ package com.trevari.spring.trcatalogservice.infrastructure.persistence;
 
 import com.trevari.spring.trcatalogservice.domain.book.Book;
 import com.trevari.spring.trcatalogservice.domain.book.BookRepository;
+import com.trevari.spring.trcatalogservice.interfaces.mapper.BookMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

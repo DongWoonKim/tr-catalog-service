@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,4 +19,9 @@ public class BookService {
         Pageable pageable = PageRequest.of(page, size);
         return bookRepository.findPage(pageable);
     }
+
+    public Optional<Book> getBookByIsbn(String rawIsbn) {
+        return bookRepository.findByIsbn(rawIsbn);
+    }
+
 }
