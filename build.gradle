@@ -1,0 +1,105 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+
+group = 'com.trevari.spring'
+version = '0.0.1-SNAPSHOT'
+description = 'tr-catalog-service'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport', 'jacocoTestCoverageVerification' // ✅ 테스트 후 리포트+검증 자동 실행
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true   // ✅ CI 도구가 읽을 수 있게 XML 생성
+        html.required = true  // ✅ 로컬에서 브라우저로 확인
+        csv.required = false
+    }
+    // 패키지/클래스 단위 제외 규칙
+    // classDirectories.from = files(classDirectories.files.collect {
+    //     fileTree(dir: it, exclude: [
+    //         '**/config/**',
+    //         '**/*Application.class'
+    //     ])
+    // })
+}
+
+jacocoTestCoverageVerification {
+    // ✅ 커버리지 게이트: 미달 시 빌드 실패
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+            // 라인 커버리지(코드라인 기준) 최소 50%
+            limit {
+                counter = 'LINE'
+                value   = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+            // 분기 커버리지(조건분기) 최소 50%
+            limit {
+                counter = 'BRANCH'
+                value   = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+        }
+
+        // 특정 파일/패키지 제외 예시
+        // rule {
+        //     element = 'CLASS'
+        //     excludes = [
+        //         'com.trevari.spring.**.config.*',
+        //         'com.trevari.spring.**.*Application'
+        //     ]
+        //     limit {
+        //         counter = 'LINE'
+        //         value   = 'COVEREDRATIO'
+        //         minimum = 0.80
+        //     }
+        // }
+    }
+}
+
+// `./gradlew coverage`로 리포트만 보고 싶을 때
+tasks.register('coverage') {
+    group = 'verification'
+    description = 'Runs tests and generates JaCoCo coverage reports'
+    dependsOn 'test', 'jacocoTestReport'
+}
