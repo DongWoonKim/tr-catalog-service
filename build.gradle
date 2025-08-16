@@ -47,6 +47,11 @@ jacoco {
     toolVersion = "0.8.13"
 }
 
+def serviceClassIncludes = [
+        '**/service/*.class',
+        '**/service/**/*.class'
+]
+
 jacocoTestReport {
     dependsOn test
     reports {
@@ -54,13 +59,14 @@ jacocoTestReport {
         html.required = true  // ✅ 로컬에서 브라우저로 확인
         csv.required = false
     }
-    // 패키지/클래스 단위 제외 규칙
-    // classDirectories.from = files(classDirectories.files.collect {
-    //     fileTree(dir: it, exclude: [
-    //         '**/config/**',
-    //         '**/*Application.class'
-    //     ])
-    // })
+
+    doFirst {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect { dir ->
+                    fileTree(dir: dir, include: serviceClassIncludes)
+                })
+        )
+    }
 }
 
 jacocoTestCoverageVerification {
@@ -81,20 +87,6 @@ jacocoTestCoverageVerification {
                 minimum = 0.30
             }
         }
-
-        // 특정 파일/패키지 제외 예시
-        // rule {
-        //     element = 'CLASS'
-        //     excludes = [
-        //         'com.trevari.spring.**.config.*',
-        //         'com.trevari.spring.**.*Application'
-        //     ]
-        //     limit {
-        //         counter = 'LINE'
-        //         value   = 'COVEREDRATIO'
-        //         minimum = 0.50
-        //     }
-        // }
     }
 }
 
