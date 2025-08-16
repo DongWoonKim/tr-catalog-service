@@ -1,6 +1,12 @@
 server:
   port: 9002
+
 spring:
   application:
     name: tr-catalog-service
+    datasource:
+      url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/trevari}
+      username: ${db.username}
+      password: ${db.password}
+      driver-class-name: org.postgresql.Driver
 
