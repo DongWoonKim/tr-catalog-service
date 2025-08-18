@@ -19,10 +19,10 @@ spring:
 
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html    # UI ?? ??
+    path: /swagger-ui.html
     display-request-duration: true
     operations-sorter: alpha
     tags-sorter: alpha
   api-docs:
-    path: /v3/api-docs        # JSON ?? ??
+    path: /v3/api-docs
 
