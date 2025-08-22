@@ -93,7 +93,8 @@ resources
 ### 🔖 테스트 커버리지
  - 테스트 코드 비즈니스 계층(application/**)만 적용 : 일정적인 부분에 있어서 조금 빠듯해서 비즈스로직만 적용하였습니다 외부 입출력 영역은 web-service를 통해 확인할 수 있는 부분이기에 넣지 않았습니다.
  - catalog service 테스트 커버리지 결과
-<img width="1098" height="126" alt="스크린샷 2025-08-22 오전 10 28 27" src="https://github.com/user-attachments/assets/8d960c01-3ac7-4df7-8e91-11e995082a38" />
+<img width="1086" height="132" alt="스크린샷 2025-08-22 오전 10 34 50" src="https://github.com/user-attachments/assets/c6f1f4f8-47c4-454e-be56-0ea56e2f87a0" />
+
 
    
 
