@@ -18,16 +18,23 @@ public class BookController {
 
     private final BookService service;
 
-    @Operation(summary = "도서 목록 조회", description = "발행일 최신순 기준 페이징 조회")
+    @Operation(
+            summary = "도서 목록 조회",
+            description = "발행일 최신순 기준 페이징 조회"
+    )
     @GetMapping
     public Page<BookResponseDTO> list(@RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "10") int size) {
-        Page<Book> books = service.getBooks(page, size);
-
-        return books.map(BookResponseDTO::from);
+        return service.getBooks(page, size)
+                .map(BookResponseDTO::from);
     }
 
-    @Operation(summary = "도서 단건 조회", description = "ISBN(13자리)으로 도서 상세를 조회합니다")
+    @Deprecated
+    @Operation(
+            summary = "도서 단건 조회",
+            description = "ISBN(13자리)으로 도서 상세를 조회합니다",
+            deprecated = true
+    )
     @GetMapping("/{isbn}")
     public BookResponseDTO getOne(@PathVariable String isbn) {
         return service.getBookByIsbn(isbn)
