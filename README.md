@@ -1,6 +1,6 @@
 ## 📚 tr-catalog-service (도서 정보 서비스)
 
-`tr-catalog-service`는 **도서 정보(Catalog)**를 제공하는 서비스로,  
+`tr-catalog-service`는 **도서 정보(Catalog)** 를 제공하는 서비스로,  
 ISBN, 제목, 저자, 출판사, 발행일, 표지 URL 등 도서의 핵심 데이터를 관리합니다.  
 
 이 서비스는 도서 데이터의 **진실의 원천(Source of Truth)** 역할을 하며,  
@@ -69,7 +69,7 @@ resources
             -> 비즈니스 로직은 순수 도메인 모델에 의존하도록 설계하여, 외부 기술이나 환경 변화로부터 받는 영향을 최소화합니다.  
 
  - infrastructure/persistence : DB와 직접 맞닿는 영역으로, 도메인 모델과 영속성 기술(JPA 등) 사이를 연결해주는 역할을 합니다.  
-    - BookRepositoryAdapter : domain 계층의 **BookRepository 인터페이스(포트)**를 구현한 어댑터입니다.
+    - BookRepositoryAdapter : domain 계층의 **BookRepository 인터페이스(포트)** 를 구현한 어댑터입니다.
                               BookJpaRepository를 내부에서 사용하면서도, 도메인 계층은 오직 BookRepository 인터페이스만 바라보도록 만들어 관심사 분리를 달성합니다.
                               -> 즉, 도메인 계층은 JPA가 무엇인지 전혀 몰라도 되고, 나중에 MongoDB, MyBatis 등 다른 기술로 교체해도 도메인 로직은 그대로 유지할 수 있습니다.  
 
@@ -78,8 +78,8 @@ resources
                          -> 변환 로직을 별도 클래스로 분리함으로써, 컨트롤러나 서비스 로직이 불필요하게 지저분해지는 것을 방지합니다.  
 
 - resources/db/migration : DB 마이그레이션 및 초기 데이터(seed) 관리와 관련된 영역입니다.
-  - V2__insert_seed_books.sql : Flyway 마이그레이션 스크립트 파일이며, 이 스크립트는 **초기 도서 데이터(seed data)**를 DB에 삽입하는 역할을 합니다.
-                                -? 애플리케이션 기동 후 바로 Catalog API를 통해 도서 데이터를 확인할 수 있도록 해줍니다.
+  - V2__insert_seed_books.sql : Flyway 마이그레이션 스크립트 파일이며, 이 스크립트는 **초기 도서 데이터(seed data)** 를 DB에 삽입하는 역할을 합니다.  
+                                - 애플리케이션 기동 후 바로 Catalog API를 통해 도서 데이터를 확인할 수 있도록 해줍니다.
 
 ### 📌 고민 사항
 1. 내부 아키텍처 설계 : 이부분은 tr-store-infra에서 기재하였으므로 생략하겠습니다.
